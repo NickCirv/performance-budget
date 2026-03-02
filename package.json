@@ -1,0 +1,27 @@
+{
+  "name": "performance-budget",
+  "version": "1.0.0",
+  "description": "Set and enforce file size budgets for your build artifacts. Stop bundle bloat in CI.",
+  "type": "module",
+  "bin": {
+    "performance-budget": "./index.js",
+    "pb": "./index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "developer-tools",
+    "cli",
+    "nodejs",
+    "zero-dependencies",
+    "performance",
+    "bundle",
+    "ci"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NickCirv/performance-budget"
+  }
+}
