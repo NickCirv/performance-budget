@@ -1,3 +1,5 @@
+![Banner](banner.svg)
+
 # performance-budget
 > Set and enforce file size budgets for your build artifacts. Stop bundle bloat in CI.
 
