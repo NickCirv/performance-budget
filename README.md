@@ -1,96 +1,46 @@
-![Banner](banner.svg)
+<div align="center">
 
 # performance-budget
-> Set and enforce file size budgets for your build artifacts. Stop bundle bloat in CI.
 
-```bash
-npx performance-budget init
-npx performance-budget
-```
+**Enforce file size limits on your build artifacts — catch bundle bloat before it ships.**
 
-```
-performance-budget · checking 4 budgets
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue?labelColor=0B0A09)](LICENSE)
+[![Zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen?labelColor=0B0A09)](package.json)
+[![Node >=18](https://img.shields.io/badge/node-%3E%3D18-brightgreen?labelColor=0B0A09)](package.json)
 
-  main JS      ████████████████░░░░  198.4 KB / 200 KB  (99%)  ✓
-  CSS          ████████░░░░░░░░░░░░   41.2 KB / 50 KB   (82%)  ✓
-  images       ██░░░░░░░░░░░░░░░░░░   98.7 KB / 500 KB  (19%)  ✓
-  total        ███████████████████░  1.94 MB / 2 MB     (97%)  ✓
-
-  All budgets passing ✓
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-## Commands
-| Command | Description |
-|---------|-------------|
-| `performance-budget init` | Create `.perf-budget.json` config |
-| `performance-budget` | Check all budgets |
-| `--ci` | Exit 1 on failure (CI mode) |
-| `--history` | Show size trend vs baseline |
-| `--baseline` | Save current sizes as baseline |
-| `--threshold N` | Warn at N% of budget (default: 80) |
-| `--format json\|table\|minimal` | Output format |
-
-## Config
-
-Running `init` creates a `.perf-budget.json` in your project root:
-
-```json
-{
-  "budgets": [
-    { "name": "main JS", "path": "dist/*.js", "maxSize": "200KB", "maxGzip": "60KB" },
-    { "name": "CSS", "path": "dist/*.css", "maxSize": "50KB", "maxGzip": "15KB" },
-    { "name": "images", "path": "dist/images/*", "maxSize": "500KB" },
-    { "name": "total", "path": "dist/**/*", "maxSize": "2MB" }
-  ]
-}
-```
-
-Each budget entry supports:
-
-| Field | Required | Description |
-|-------|----------|-------------|
-| `name` | yes | Human-readable label |
-| `path` | yes | Glob pattern (supports `*` and `**`) |
-| `maxSize` | yes | Max raw size (`B`, `KB`, `MB`, `GB`) |
-| `maxGzip` | no | Max estimated gzip size |
-
-## CI Usage
-
-```yaml
-# GitHub Actions example
-- name: Check performance budgets
-  run: npx performance-budget --ci
-```
-
-Exit code `1` when any budget is exceeded. Exit code `0` when all pass.
-
-## Size Tracking
-
-```bash
-# After your first build, save a baseline
-npx performance-budget --baseline
-
-# On subsequent builds, compare against it
-npx performance-budget --history
-```
-
-Output shows `+N KB` or `-N KB` vs the saved baseline, so you can spot regressions at a glance.
-
-## HTML Report
-
-```bash
-npx performance-budget --report report.html
-```
-
-Generates a standalone HTML report with SVG bar charts. No external dependencies — works offline.
+</div>
 
 ## Install
 ```bash
-npx performance-budget
-npm install -g performance-budget
+npx github:NickCirv/performance-budget init
 ```
 
+## Usage
+```bash
+# Check all budgets (reads .perf-budget.json)
+npx github:NickCirv/performance-budget
+
+# CI mode — exit 1 if any budget is exceeded
+npx github:NickCirv/performance-budget --ci
+
+# Save current sizes as baseline, then compare on next run
+npx github:NickCirv/performance-budget --baseline
+npx github:NickCirv/performance-budget --history
+```
+
+| Flag | Description |
+|------|-------------|
+| `--ci` | Exit 1 when any budget is exceeded |
+| `--history` | Show size delta vs saved baseline |
+| `--baseline` | Save current sizes as baseline |
+| `--threshold <n>` | Warn at n% of budget (default: 80) |
+| `--format table\|json\|minimal` | Output format (default: table) |
+| `--report <file>` | Save standalone HTML report |
+| `--config <file>` | Config file path (default: `.perf-budget.json`) |
+
+## What it does
+
+`performance-budget` reads a `.perf-budget.json` config defining glob patterns and size limits for your build output, then checks actual file sizes (and optional gzip estimates) against those limits. It prints a progress-bar table in the terminal and exits non-zero in CI when any limit is breached. Running `--baseline` saves a size snapshot so `--history` can show KB-level deltas across builds. The `--report` flag generates a self-contained HTML report with SVG bar charts.
+
 ---
-**Zero dependencies** · **Node 18+** · Made by [NickCirv](https://github.com/NickCirv) · MIT
+<sub>Zero dependencies · Node 18+ · MIT · by <a href="https://github.com/NickCirv">NickCirv</a></sub>
